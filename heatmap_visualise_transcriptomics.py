@@ -398,13 +398,14 @@ def compute_attention_gene_overlap(
             intersection = np.logical_and(expr_mask, attn_mask).sum()
             union = np.logical_or(expr_mask, attn_mask).sum()
             
-            # iou = intersection / (union + 1e-8)
-            iou = np.sum(np.minimum(expr_heatmap, attn_heatmap)) / np.sum(np.maximum(expr_heatmap, attn_heatmap))
+            iou = intersection / (union + 1e-8)
+            soft_iou = np.sum(np.minimum(expr_heatmap, attn_heatmap)) / np.sum(np.maximum(expr_heatmap, attn_heatmap))
             
             # Store results
             row[f"Level {level} - Pearson"] = round(pearson_corr, 4)
             row[f"Level {level} - Cosine"] = round(cosine_sim, 4)
             row[f"Level {level} - IoU@{threshold_quantile}"] = round(iou, 4)
+            row[f"Level {level} - Soft IoU"] = round(soft_iou, 4)
 
         results.append(row)
 

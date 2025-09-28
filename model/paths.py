@@ -624,15 +624,15 @@ class PATHSProcessor(nn.Module, Processor):
             ft = torch.cat((all_ctx, slide_features), dim=1)
             logits = self.classification_layer(ft)
         else:
-            if isinstance(data.bulk_omics, list):
-                # convert list of tensors to a tensor
-                catted_bulk_omics = torch.stack(data.bulk_omics).T
-                print(f"catted_bulk_omics shape: {catted_bulk_omics.shape}")
-            else:
-                catted_bulk_omics = data.bulk_omics
-                print(f"data.bulk_omics.shape: {catted_bulk_omics.shape}")
-            
             if self.depth == 4 and self.config.add_bulk_omics:
+                if isinstance(data.bulk_omics, list):
+                    # convert list of tensors to a tensor
+                    catted_bulk_omics = torch.stack(data.bulk_omics).T
+                    print(f"catted_bulk_omics shape: {catted_bulk_omics.shape}")
+                else:
+                    catted_bulk_omics = data.bulk_omics
+                    print(f"data.bulk_omics.shape: {catted_bulk_omics.shape}")
+                
                 print(f"catted_bulk_omics shape: {catted_bulk_omics.shape}")
                 print(f"adding bulk omics to slide features")
                 slide_features = self.combine_bulk_omics(
